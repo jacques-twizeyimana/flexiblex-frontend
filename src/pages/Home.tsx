@@ -112,11 +112,11 @@ export default function Home() {
                 Trusted by Growing Companies
               </h3>
             </div>
-            <div className="flex justify-center items-center gap-12 opacity-50">
+            <div className="flex justify-center items-center gap-12">
               {/* Add company logos here */}
-              <div className="text-2xl text-red-500 font-bold">ALU</div>
+              <div className="text-2xl text-red-600 font-bold">ALU</div>
               <div className="text-2xl font-bold">SBS Ssystems</div>
-              <div className="text-2xl text-green-500 font-bold">
+              <div className="text-2xl text-green-600 font-bold">
                 FlexibleX Inc.
               </div>
             </div>
