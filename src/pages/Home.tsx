@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   Clock,
@@ -9,6 +7,8 @@ import {
   Shield,
   Gift,
 } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -18,10 +18,10 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="text-2xl font-bold text-green-600">FlexibleX</div>
           <div className="flex gap-4">
-            <Link href="/login">
+            <Link to="/login">
               <Button variant="ghost">Sign In</Button>
             </Link>
-            <Link href="/signup">
+            <Link to="/signup">
               <Button className="bg-green-600 hover:bg-green-700">
                 Get Started
               </Button>
@@ -50,7 +50,7 @@ export default function Home() {
                 platform.
               </p>
               <div className="flex justify-center gap-4">
-                <Link href="signup">
+                <Link to="/signup">
                   <Button
                     size="xxl"
                     className="bg-green-600 hover:bg-green-700"
@@ -114,9 +114,11 @@ export default function Home() {
             </div>
             <div className="flex justify-center items-center gap-12 opacity-50">
               {/* Add company logos here */}
-              <div className="text-2xl font-bold">ALU</div>
+              <div className="text-2xl text-red-500 font-bold">ALU</div>
               <div className="text-2xl font-bold">SBS Ssystems</div>
-              <div className="text-2xl font-bold">FlexibleX Inc.</div>
+              <div className="text-2xl text-green-500 font-bold">
+                FlexibleX Inc.
+              </div>
             </div>
           </div>
         </div>
@@ -130,7 +132,7 @@ export default function Home() {
             <p className="text-xl mb-8 text-green-50">
               Join thousands of companies already using FlexibleX
             </p>
-            <Link href="/signup">
+            <Link to="/signup">
               <Button
                 size="lg"
                 variant="outline"
