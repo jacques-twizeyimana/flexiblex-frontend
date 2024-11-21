@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -7,6 +7,7 @@ import InviteTeam from "./pages/InviteTeam";
 import Dashboard from "./pages/Dashboard";
 import Benefits from "./pages/Benefits";
 import Deductions from "./pages/Deductions";
+import Home from "./pages/Home";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/benefits" element={<Benefits />} />
           <Route path="/deductions" element={<Deductions />} />
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Home />} />
         </Routes>
         <Toaster position="top-center" />
       </div>
