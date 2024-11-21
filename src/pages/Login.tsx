@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../lib/firebase';
-import { toast } from 'react-hot-toast';
-import { Building2, Lock, Mail } from 'lucide-react';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../lib/firebase";
+import { toast } from "react-hot-toast";
+import { Building2, Lock, Mail } from "lucide-react";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/company-setup');
+      navigate("/company-setup");
     } catch (error) {
-      toast.error('Invalid credentials');
+      toast.error("Invalid credentials");
+      console.error(error);
     }
   };
 
@@ -27,10 +28,15 @@ export default function Login() {
           <div className="flex justify-center">
             <Building2 className="h-12 w-12 text-green-600" />
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">Welcome back</h2>
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            Welcome back
+          </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/signup" className="font-medium text-green-600 hover:text-green-500">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="font-medium text-green-600 hover:text-green-500"
+            >
               Sign up
             </Link>
           </p>
@@ -38,7 +44,10 @@ export default function Login() {
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
-              <label htmlFor="email" className="sr-only">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email address
               </label>
               <div className="relative">
@@ -58,7 +67,10 @@ export default function Login() {
               </div>
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Password
               </label>
               <div className="relative">
@@ -87,13 +99,19 @@ export default function Login() {
                 type="checkbox"
                 className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label
+                htmlFor="remember-me"
+                className="ml-2 block text-sm text-gray-900"
+              >
                 Remember me
               </label>
             </div>
 
             <div className="text-sm">
-              <a href="#" className="font-medium text-green-600 hover:text-green-500">
+              <a
+                href="#"
+                className="font-medium text-green-600 hover:text-green-500"
+              >
                 Forgot your password?
               </a>
             </div>
