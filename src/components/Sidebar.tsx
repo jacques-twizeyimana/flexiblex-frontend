@@ -1,14 +1,20 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Briefcase, Users, Calendar, Clock, Settings } from 'lucide-react';
+import { Link, useLocation } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Users,
+  Clock,
+  Building2,
+  Heart,
+  Calculator,
+} from "lucide-react";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-  { icon: Briefcase, label: 'Job Desk', path: '/job-desk' },
-  { icon: Users, label: 'Employees', path: '/employees' },
-  { icon: Calendar, label: 'Leave', path: '/leave' },
-  { icon: Clock, label: 'Attendance', path: '/attendance' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
+  { icon: Users, label: "Employees", path: "/employees" },
+  { icon: Clock, label: "Attendance", path: "/attendance" },
+  { icon: Building2, label: "Company Info", path: "/company-info" },
+  { icon: Heart, label: "Benefits", path: "/benefits" },
+  { icon: Calculator, label: "Deductions", path: "/deductions" },
 ];
 
 export default function Sidebar() {
@@ -23,15 +29,15 @@ export default function Sidebar() {
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
-          
+
           return (
             <Link
               key={item.path}
               to={item.path}
               className={`flex items-center px-6 py-3 text-sm ${
                 isActive
-                  ? 'text-green-600 bg-green-50 border-r-2 border-green-600'
-                  : 'text-gray-600 hover:bg-gray-50'
+                  ? "text-green-600 bg-green-50 border-r-2 border-green-600"
+                  : "text-gray-600 hover:bg-gray-50"
               }`}
             >
               <Icon className="h-5 w-5 mr-3" />
