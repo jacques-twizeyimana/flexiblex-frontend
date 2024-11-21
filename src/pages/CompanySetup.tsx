@@ -1,37 +1,38 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
-import { db, auth } from '../lib/firebase';
-import { toast } from 'react-hot-toast';
-import { Building2, Mail, MapPin, Globe } from 'lucide-react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
+import { db, auth } from "../lib/firebase";
+import { toast } from "react-hot-toast";
+import { Building2, Mail, MapPin, Globe } from "lucide-react";
 
 export default function CompanySetup() {
-  const [companyName, setCompanyName] = useState('');
-  const [companyEmail, setCompanyEmail] = useState('');
-  const [address, setAddress] = useState('');
-  const [timezone, setTimezone] = useState('UTC');
+  const [companyName, setCompanyName] = useState("");
+  const [companyEmail, setCompanyEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [timezone, setTimezone] = useState("UTC");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth.currentUser) {
-      toast.error('Please sign in first');
+      toast.error("Please sign in first");
       return;
     }
 
     try {
-      await setDoc(doc(db, 'companies', auth.currentUser.uid), {
+      await setDoc(doc(db, "companies", auth.currentUser.uid), {
         name: companyName,
         email: companyEmail,
         address,
         timezone,
         createdAt: new Date().toISOString(),
-        ownerId: auth.currentUser.uid
+        ownerId: auth.currentUser.uid,
       });
-      
-      navigate('/invite-team');
+
+      navigate("/invite-team");
     } catch (error) {
-      toast.error('Failed to create company');
+      toast.error("Failed to create company");
+      console.log(error);
     }
   };
 
@@ -42,16 +43,21 @@ export default function CompanySetup() {
           <div className="flex justify-center">
             <Building2 className="h-12 w-12 text-green-600" />
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">Set up your company</h2>
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            Set up your company
+          </h2>
           <p className="mt-2 text-sm text-gray-600">
             Tell us about your organization
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
-              <label htmlFor="company-name" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="company-name"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Company Name
               </label>
               <div className="relative mt-1">
@@ -72,7 +78,10 @@ export default function CompanySetup() {
             </div>
 
             <div>
-              <label htmlFor="company-email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="company-email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Company Email
               </label>
               <div className="relative mt-1">
@@ -93,7 +102,10 @@ export default function CompanySetup() {
             </div>
 
             <div>
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Full Address
               </label>
               <div className="relative mt-1">
@@ -114,7 +126,10 @@ export default function CompanySetup() {
             </div>
 
             <div>
-              <label htmlFor="timezone" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="timezone"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Timezone
               </label>
               <div className="relative mt-1">
