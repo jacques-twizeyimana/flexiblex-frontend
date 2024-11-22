@@ -4,6 +4,9 @@ import { LogOut, Settings, Download } from 'lucide-react';
 import PageWithTabs from "@/components/Tabnavigation";
 import Table from "../components/Table"
 const Attendance = () => {
+    // const tabs = [
+    //     { id: 'apply', label: 'Apply between' },
+    //     { id: 'department', label: 'Department' }
     const tabs = [
         { id: 'apply', label: 'Apply between' },
         { id: 'department', label: 'Department' },
@@ -11,7 +14,15 @@ const Attendance = () => {
         { id: 'rejected', label: 'Rejected' },
         { id: 'duration', label: 'Duration' }
       ];
-      const data = [
+    //   const data = [
+    //     {
+    //       behavior: "DebitNoteMcKee.jpg",
+    //       behaviorFile: "/files/DebitNoteMcKee.jpg",
+    //       totalHours: "Busy",
+    //     },
+    //     // Add more rows as needed
+    //   ];
+    const data = [
         {
           name: "Jeremy Neigh",
           profilePicture: "https://via.placeholder.com/40",
