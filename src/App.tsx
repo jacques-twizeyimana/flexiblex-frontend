@@ -6,7 +6,8 @@ import Signup from "./pages/Signup";
 import CompanySetup from "./pages/CompanySetup";
 import InviteTeam from "./pages/InviteTeam";
 import Dashboard from "./pages/Dashboard";
-import Home from "./pages/Home";
+import Leave from "./pages/Leave";
+// import Home from "./pages/Home";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
           <Route path="/company-setup" element={<CompanySetup />} />
           <Route path="/invite-team" element={<InviteTeam />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/leave" element={<Leave/>} />
         </Routes>
         <Toaster position="top-center" />
       </div>
