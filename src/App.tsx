@@ -6,6 +6,7 @@ import CompanySetup from "./pages/CompanySetup";
 import InviteTeam from "./pages/InviteTeam";
 import Dashboard from "./pages/Dashboard";
 import Leave from "./pages/Leave";
+import Attendance from "./pages/Attendance";
 import Home from "./pages/Home";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/" element={<Home />} />
           <Route path="/leave" element={<Leave/>} />
+          <Route path="/attendance" element= {<Attendance/>} />
         </Routes>
         <Toaster position="top-center" />
       </div>
