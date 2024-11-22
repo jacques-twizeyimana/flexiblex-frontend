@@ -7,7 +7,6 @@ import {
   doc,
 } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
-import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
@@ -94,10 +93,9 @@ export default function Benefits() {
   };
 
   return (
-    <div className="flex bg-gray-50">
-      <Sidebar />
-      <main className="flex-1 ml-64 p-8">
-        <div className="max-w-4xl mx-auto">
+    <div>
+      <main className="flex-1 p-8">
+        <div>
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900">
               Benefits Management

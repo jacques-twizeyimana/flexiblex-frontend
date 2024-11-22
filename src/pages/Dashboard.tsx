@@ -87,11 +87,13 @@ export default function Dashboard() {
 
   if (!user || !userData) {
     return (
-      <main className="flex-1 ml-64 p-8">
-        <div className="animate-pulse flex space-x-4">
-          <div className="h-8 w-48 bg-gray-200 rounded"></div>
+      <div className="flex justify-center items-center h-96">
+        <div className="relative inline-flex">
+          <div className="w-8 h-8 bg-green-600 rounded-full" />
+          <div className="w-8 h-8 bg-green-600 rounded-full absolute top-0 left-0 animate-ping" />
+          <div className="w-8 h-8 bg-green-600 rounded-full absolute top-0 left-0 animate-pulse" />
         </div>
-      </main>
+      </div>
     );
   }
 
