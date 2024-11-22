@@ -7,21 +7,33 @@ import InviteTeam from "./pages/InviteTeam";
 import Dashboard from "./pages/Dashboard";
 import Benefits from "./pages/Benefits";
 import Deductions from "./pages/Deductions";
+import DashboardLayout from "./components/DashboardLayout";
+import CompanyInfo from "./pages/CompanyInfo";
 import Home from "./pages/Home";
+import NotFound from "./pages/Notfound";
+import EmployeeManagement from "./pages/Employees";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
         <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/company-setup" element={<CompanySetup />} />
           <Route path="/invite-team" element={<InviteTeam />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/benefits" element={<Benefits />} />
-          <Route path="/deductions" element={<Deductions />} />
-          <Route path="/" element={<Home />} />
+
+          {/* Protected dashboard routes */}
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route path="" element={<Dashboard />} />
+            <Route path="employees" element={<EmployeeManagement />} />
+            <Route path="benefits" element={<Benefits />} />
+            <Route path="deductions" element={<Deductions />} />
+            <Route path="company-info" element={<CompanyInfo />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster position="top-center" />
       </div>
