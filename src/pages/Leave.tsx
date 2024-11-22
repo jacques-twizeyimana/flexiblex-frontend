@@ -8,6 +8,13 @@ import { Input } from "@/components/ui/input";
 import UserTable from "../components/UserTable"
 
 const Leave  = () => {
+    const tabs = [
+        { id: 'department', label: 'Department' },
+        { id: 'workshift', label: 'Work shift' },
+        { id: 'leave-duration', label: 'Leave duration' },
+        { id: 'users', label: 'Users' }
+      ];
+
     return(
         <div>
             <Sidebar/>
@@ -24,8 +31,8 @@ const Leave  = () => {
                 </div>
 
                 <div className="bg-white rounded-md p-6 mt-10">
-                    <div className="flex justify-between items-center">
-                        <PageWithTabs/>
+                    <div className="flex justify-between items-center mb-4">
+                              <PageWithTabs tabs={tabs} />
                     <Button className="bg-white hover:bg-white border-2 border-slate-300 text-gray-700 mb-4"> 
                         <Calendar/>        
                         Select date
