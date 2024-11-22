@@ -4,7 +4,7 @@ import {
   ArrowRight,
   Clock,
   DollarSign,
-  Users2,
+  User,
   Calculator,
   Shield,
   Gift,
@@ -71,7 +71,7 @@ export default function Home() {
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <FeatureCard
-                icon={<Users2 className="w-12 h-12 text-green-600" />}
+                icon={<User className="w-12 h-12 text-green-600" />}
                 title="Employee Management"
                 description="Efficiently manage employee records, from onboarding to role changes and departures."
               />
