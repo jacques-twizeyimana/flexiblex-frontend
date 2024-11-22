@@ -1,5 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import { db, auth } from "../lib/firebase";
 import Sidebar from "../components/Sidebar";
+import Modal from "../components/Modal";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -11,11 +20,11 @@ interface Deduction {
   description: string;
 }
 
-type NewDeduction = Omit<Deduction, "id">;
+type NewDeduction = Omit<Deduction, "id" | "createdAt">;
 
 export default function Deductions() {
   const [deductions, setDeductions] = useState<Deduction[]>([]);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newDeduction, setNewDeduction] = useState<NewDeduction>({
     name: "",
     type: "fixed" as const,
@@ -23,21 +32,65 @@ export default function Deductions() {
     description: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const deduction = {
-      id: Date.now().toString(),
-      ...newDeduction,
-    };
-    setDeductions([...deductions, deduction]);
-    setIsAdding(false);
-    setNewDeduction({ name: "", type: "fixed", value: 0, description: "" });
-    toast.success("Deduction added successfully");
+  useEffect(() => {
+    fetchDeductions();
+  }, []);
+
+  const fetchDeductions = async () => {
+    if (!auth.currentUser) return;
+    try {
+      const querySnapshot = await getDocs(
+        collection(db, `companies/${auth.currentUser.uid}/deductions`)
+      );
+      const deductionsData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Deduction[];
+      setDeductions(deductionsData);
+    } catch (error) {
+      toast.error("Failed to fetch deductions");
+      console.error(error);
+    }
   };
 
-  const deleteDeduction = (id: string) => {
-    setDeductions(deductions.filter((deduction) => deduction.id !== id));
-    toast.success("Deduction deleted successfully");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!auth.currentUser) {
+      toast.error("Please sign in first");
+      return;
+    }
+
+    try {
+      await addDoc(
+        collection(db, `companies/${auth.currentUser.uid}/deductions`),
+        {
+          ...newDeduction,
+          createdAt: new Date().toISOString(),
+        }
+      );
+
+      setIsModalOpen(false);
+      setNewDeduction({ name: "", type: "fixed", value: 0, description: "" });
+      toast.success("Deduction added successfully");
+      fetchDeductions();
+    } catch (error) {
+      toast.error("Failed to add deduction");
+      console.error(error);
+    }
+  };
+
+  const deleteDeduction = async (id: string) => {
+    if (!auth.currentUser) return;
+    try {
+      await deleteDoc(
+        doc(db, `companies/${auth.currentUser.uid}/deductions/${id}`)
+      );
+      toast.success("Deduction deleted successfully");
+      fetchDeductions();
+    } catch (error) {
+      toast.error("Failed to delete deduction");
+      console.error(error);
+    }
   };
 
   return (
@@ -50,106 +103,13 @@ export default function Deductions() {
               Deductions Management
             </h1>
             <button
-              onClick={() => setIsAdding(true)}
+              onClick={() => setIsModalOpen(true)}
               className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Deduction
             </button>
           </div>
-
-          {isAdding && (
-            <div className="bg-white rounded-lg shadow mb-6 p-6">
-              <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Deduction Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                      value={newDeduction.name}
-                      onChange={(e) =>
-                        setNewDeduction({
-                          ...newDeduction,
-                          name: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Type
-                    </label>
-                    <select
-                      className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                      value={newDeduction.type}
-                      onChange={(e) =>
-                        setNewDeduction({
-                          ...newDeduction,
-                          type: e.target.value as "fixed" | "percentage",
-                        })
-                      }
-                    >
-                      <option value="fixed">Fixed Amount</option>
-                      <option value="percentage">Percentage</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {newDeduction.type === "fixed" ? "Amount" : "Percentage"}
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      step={newDeduction.type === "percentage" ? "0.01" : "1"}
-                      className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                      value={newDeduction.value}
-                      onChange={(e) =>
-                        setNewDeduction({
-                          ...newDeduction,
-                          value: parseFloat(e.target.value),
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Description
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                      value={newDeduction.description}
-                      onChange={(e) =>
-                        setNewDeduction({
-                          ...newDeduction,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="mt-6 flex justify-end space-x-3">
-                  <button
-                    type="button"
-                    onClick={() => setIsAdding(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                  >
-                    Save Deduction
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
 
           <div className="bg-white rounded-lg shadow">
             <table className="min-w-full divide-y divide-gray-200">
@@ -206,6 +166,98 @@ export default function Deductions() {
           </div>
         </div>
       </main>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Add New Deduction"
+      >
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Deduction Name
+              </label>
+              <input
+                type="text"
+                required
+                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                value={newDeduction.name}
+                onChange={(e) =>
+                  setNewDeduction({ ...newDeduction, name: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Type
+              </label>
+              <select
+                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                value={newDeduction.type}
+                onChange={(e) =>
+                  setNewDeduction({
+                    ...newDeduction,
+                    type: e.target.value as "fixed" | "percentage",
+                  })
+                }
+              >
+                <option value="fixed">Fixed Amount</option>
+                <option value="percentage">Percentage</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {newDeduction.type === "fixed" ? "Amount" : "Percentage"}
+              </label>
+              <input
+                type="number"
+                required
+                step={newDeduction.type === "percentage" ? "0.01" : "1"}
+                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                value={newDeduction.value}
+                onChange={(e) =>
+                  setNewDeduction({
+                    ...newDeduction,
+                    value: parseFloat(e.target.value),
+                  })
+                }
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Description
+              </label>
+              <input
+                type="text"
+                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                value={newDeduction.description}
+                onChange={(e) =>
+                  setNewDeduction({
+                    ...newDeduction,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </div>
+          </div>
+          <div className="mt-6 flex justify-end space-x-3">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            >
+              Save Deduction
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
