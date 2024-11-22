@@ -10,11 +10,11 @@ import {
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
-  { icon: Users, label: "Employees", path: "/employees" },
-  { icon: Clock, label: "Attendance", path: "/attendance" },
-  { icon: Building2, label: "Company Info", path: "/company-info" },
-  { icon: Heart, label: "Benefits", path: "/benefits" },
-  { icon: Calculator, label: "Deductions", path: "/deductions" },
+  { icon: Users, label: "Employees", path: "/dashboard/employees" },
+  { icon: Clock, label: "Attendance", path: "/dashboard/attendance" },
+  { icon: Building2, label: "Company Info", path: "/dashboard/company-info" },
+  { icon: Heart, label: "Benefits", path: "/dashboard/benefits" },
+  { icon: Calculator, label: "Deductions", path: "/dashboard/deductions" },
 ];
 
 export default function Sidebar() {
