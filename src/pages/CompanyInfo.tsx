@@ -2,13 +2,17 @@ import React, { useState, useEffect } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
 import { toast } from "react-hot-toast";
-import { Building2, Mail, MapPin, Globe } from "lucide-react";
+import { Building2, Mail, Phone, MapPin } from "lucide-react";
 
 interface CompanyData {
   name: string;
   email: string;
-  address: string;
-  timezone: string;
+  phone: string;
+  address: {
+    street: string;
+    city: string;
+    country: string;
+  };
 }
 
 export default function CompanyInfo() {
@@ -16,8 +20,12 @@ export default function CompanyInfo() {
   const [companyData, setCompanyData] = useState<CompanyData>({
     name: "",
     email: "",
-    address: "",
-    timezone: "UTC",
+    phone: "",
+    address: {
+      street: "",
+      city: "",
+      country: "",
+    },
   });
 
   useEffect(() => {
@@ -71,100 +79,148 @@ export default function CompanyInfo() {
       </div>
 
       <div className="bg-white rounded-lg shadow p-6">
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Company Name
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Building2 className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                required
+                disabled={!isEditing}
+                className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
+                value={companyData.name}
+                onChange={(e) =>
+                  setCompanyData({ ...companyData, name: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Company Email
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Mail className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="email"
+                required
+                disabled={!isEditing}
+                className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
+                value={companyData.email}
+                onChange={(e) =>
+                  setCompanyData({ ...companyData, email: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Phone Number
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Phone className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="tel"
+                required
+                disabled={!isEditing}
+                className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
+                value={companyData.phone}
+                onChange={(e) =>
+                  setCompanyData({ ...companyData, phone: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Company Name
+                Country
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Building2 className="h-5 w-5 text-gray-400" />
+                  <MapPin className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type="text"
                   required
                   disabled={!isEditing}
                   className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
-                  value={companyData.name}
+                  value={companyData.address.country}
                   onChange={(e) =>
-                    setCompanyData({ ...companyData, name: e.target.value })
+                    setCompanyData({
+                      ...companyData,
+                      address: {
+                        ...companyData.address,
+                        country: e.target.value,
+                      },
+                    })
                   }
                 />
               </div>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Company Email
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="email"
-                  required
-                  disabled={!isEditing}
-                  className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
-                  value={companyData.email}
-                  onChange={(e) =>
-                    setCompanyData({ ...companyData, email: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Address
+                City
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <MapPin className="h-5 w-5 text-gray-400" />
                 </div>
-                <textarea
+                <input
+                  type="text"
                   required
                   disabled={!isEditing}
-                  rows={3}
                   className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
-                  value={companyData.address}
+                  value={companyData.address.city}
                   onChange={(e) =>
-                    setCompanyData({ ...companyData, address: e.target.value })
+                    setCompanyData({
+                      ...companyData,
+                      address: { ...companyData.address, city: e.target.value },
+                    })
                   }
                 />
               </div>
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Timezone
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Globe className="h-5 w-5 text-gray-400" />
-                </div>
-                <select
-                  required
-                  disabled={!isEditing}
-                  className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
-                  value={companyData.timezone}
-                  onChange={(e) =>
-                    setCompanyData({ ...companyData, timezone: e.target.value })
-                  }
-                >
-                  <option value="UTC">UTC</option>
-                  <option value="America/New_York">Eastern Time</option>
-                  <option value="America/Chicago">Central Time</option>
-                  <option value="America/Denver">Mountain Time</option>
-                  <option value="America/Los_Angeles">Pacific Time</option>
-                </select>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Street Address
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <MapPin className="h-5 w-5 text-gray-400" />
               </div>
+              <input
+                type="text"
+                required
+                disabled={!isEditing}
+                className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 disabled:bg-gray-50 disabled:text-gray-500"
+                value={companyData.address.street}
+                onChange={(e) =>
+                  setCompanyData({
+                    ...companyData,
+                    address: { ...companyData.address, street: e.target.value },
+                  })
+                }
+              />
             </div>
           </div>
 
           {isEditing && (
-            <div className="mt-6 flex justify-end space-x-3">
+            <div className="flex justify-end space-x-3">
               <button
                 type="button"
                 onClick={() => {
