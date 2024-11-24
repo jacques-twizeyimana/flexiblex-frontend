@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import { toast } from "react-hot-toast";
-import { Building2, Lock, Mail, User, Briefcase } from "lucide-react";
+import { Building2 } from "lucide-react";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -62,124 +62,94 @@ export default function Signup() {
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSignup}>
-          <div className="rounded-md shadow-sm space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  First Name
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    required
-                    className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                    placeholder="John"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Last Name
-                </label>
-                <div className="relative">
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    required
-                    className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                    placeholder="Doe"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label
-                htmlFor="role"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Role at Company
+              <label className="block text-sm font-medium text-gray-700">
+                First Name
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Briefcase className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="role"
-                  name="role"
-                  type="text"
-                  required
-                  className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="HR Manager, CEO"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-              </div>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                required
+                className="input-field mt-1"
+                placeholder="John"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
             </div>
-
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email Address
+              <label className="block text-sm font-medium text-gray-700">
+                Last Name
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                required
+                className="input-field mt-1"
+                placeholder="Doe"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
             </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Profession
+            </label>
+            <select
+              className="input-field mt-1"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="">Select a profession</option>
+              <option value="doctor">Doctor</option>
+              <option value="engineer">Engineer</option>
+              <option value="teacher">Teacher</option>
+              <option value="chef">Chef</option>
+              <option value="police_officer">Police Officer</option>
+              <option value="software_developer">Software Developer</option>
+              <option value="nurse">Nurse</option>
+              <option value="accountant">Accountant</option>
+              <option value="architect">Architect</option>
+              <option value="electrician">Electrician</option>
+              <option value="mechanic">Mechanic</option>
+              <option value="graphic_designer">Graphic Designer</option>
+              <option value="photographer">Photographer</option>
+              <option value="lawyer">Lawyer</option>
+              <option value="journalist">Journalist</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              className="input-field mt-1"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              className="input-field mt-1"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
 
           <div>

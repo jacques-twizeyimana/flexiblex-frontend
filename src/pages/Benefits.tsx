@@ -102,7 +102,7 @@ export default function Benefits() {
             </h1>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="flex items-center btn-primary"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Benefit
@@ -141,7 +141,7 @@ export default function Benefits() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {benefit.type === "fixed"
-                        ? `$${benefit.value}`
+                        ? `${benefit.value.toLocaleString()} RWF`
                         : `${benefit.value}%`}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -168,84 +168,89 @@ export default function Benefits() {
         onClose={() => setIsModalOpen(false)}
         title="Add New Benefit"
       >
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Benefit Name
-              </label>
-              <input
-                type="text"
-                required
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                value={newBenefit.name}
-                onChange={(e) =>
-                  setNewBenefit({ ...newBenefit, name: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Type
-              </label>
-              <select
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                value={newBenefit.type}
-                onChange={(e) =>
-                  setNewBenefit({
-                    ...newBenefit,
-                    type: e.target.value as "fixed" | "percentage",
-                  })
-                }
-              >
-                <option value="fixed">Fixed Amount</option>
-                <option value="percentage">Percentage</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {newBenefit.type === "fixed" ? "Amount" : "Percentage"}
-              </label>
-              <input
-                type="number"
-                required
-                step={newBenefit.type === "percentage" ? "0.01" : "1"}
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                value={newBenefit.value}
-                onChange={(e) =>
-                  setNewBenefit({
-                    ...newBenefit,
-                    value: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <input
-                type="text"
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                value={newBenefit.description}
-                onChange={(e) =>
-                  setNewBenefit({ ...newBenefit, description: e.target.value })
-                }
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Benefit Name
+            </label>
+            <input
+              type="text"
+              name="benefitName"
+              placeholder="Health Insurance"
+              className="input-field"
+              value={newBenefit.name}
+              onChange={(e) =>
+                setNewBenefit({ ...newBenefit, name: e.target.value })
+              }
+              required
+            />
           </div>
-          <div className="mt-6 flex justify-end space-x-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
+            <textarea
+              name="benefitDescription"
+              rows={3}
+              placeholder="Health insurance for all employees"
+              className="input-field"
+              value={newBenefit.description}
+              onChange={(e) =>
+                setNewBenefit({ ...newBenefit, description: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Payment Type
+            </label>
+            <select
+              name="benefitType"
+              className="input-field"
+              value={newBenefit.type}
+              onChange={(e) =>
+                setNewBenefit({
+                  ...newBenefit,
+                  type: e.target.value as "fixed" | "percentage",
+                })
+              }
+              required
+            >
+              <option value="fixed">Fixed Amount</option>
+              <option value="percentage">Percentage</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {newBenefit.type === "fixed"
+                ? "Amount (RWF)"
+                : "Percentage (of salary)"}
+            </label>
+            <input
+              type="number"
+              name="benefitValue"
+              placeholder="1000"
+              className="input-field"
+              value={newBenefit.value}
+              onChange={(e) =>
+                setNewBenefit({
+                  ...newBenefit,
+                  value: parseFloat(e.target.value),
+                })
+              }
+              max={newBenefit.type === "fixed" ? Infinity : 100}
+              required
+            />
+          </div>
+          <div className="flex justify-end gap-4">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="btn-secondary"
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
+            <button type="submit" className="btn-primary">
               Save Benefit
             </button>
           </div>

@@ -102,7 +102,7 @@ export default function Deductions() {
             </h1>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="flex items-center btn-primary"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Deduction
@@ -170,87 +170,87 @@ export default function Deductions() {
         onClose={() => setIsModalOpen(false)}
         title="Add New Deduction"
       >
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Deduction Name
-              </label>
-              <input
-                type="text"
-                required
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                value={newDeduction.name}
-                onChange={(e) =>
-                  setNewDeduction({ ...newDeduction, name: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Type
-              </label>
-              <select
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                value={newDeduction.type}
-                onChange={(e) =>
-                  setNewDeduction({
-                    ...newDeduction,
-                    type: e.target.value as "fixed" | "percentage",
-                  })
-                }
-              >
-                <option value="fixed">Fixed Amount</option>
-                <option value="percentage">Percentage</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {newDeduction.type === "fixed" ? "Amount" : "Percentage"}
-              </label>
-              <input
-                type="number"
-                required
-                step={newDeduction.type === "percentage" ? "0.01" : "1"}
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                value={newDeduction.value}
-                onChange={(e) =>
-                  setNewDeduction({
-                    ...newDeduction,
-                    value: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <input
-                type="text"
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-                value={newDeduction.description}
-                onChange={(e) =>
-                  setNewDeduction({
-                    ...newDeduction,
-                    description: e.target.value,
-                  })
-                }
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Deduction Name
+            </label>
+            <input
+              type="text"
+              name="deduction-name"
+              placeholder="Tax"
+              className="input-field"
+              value={newDeduction.name}
+              onChange={(e) =>
+                setNewDeduction({ ...newDeduction, name: e.target.value })
+              }
+              required
+            />
           </div>
-          <div className="mt-6 flex justify-end space-x-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
+            <textarea
+              rows={3}
+              placeholder="Income tax"
+              className="input-field"
+              value={newDeduction.description}
+              onChange={(e) =>
+                setNewDeduction({
+                  ...newDeduction,
+                  description: e.target.value,
+                })
+              }
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Type
+            </label>
+            <select
+              className="input-field"
+              value={newDeduction.type}
+              onChange={(e) =>
+                setNewDeduction({
+                  ...newDeduction,
+                  type: e.target.value as "fixed" | "percentage",
+                })
+              }
+            >
+              <option value="fixed">Fixed Amount</option>
+              <option value="percentage">Percentage</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {newDeduction.type === "fixed"
+                ? "Amount (RWF)"
+                : "Percentage (of salary)"}
+            </label>
+            <input
+              type="number"
+              step={newDeduction.type === "percentage" ? "0.01" : "1"}
+              className="input-field"
+              value={newDeduction.value}
+              onChange={(e) =>
+                setNewDeduction({
+                  ...newDeduction,
+                  value: parseFloat(e.target.value),
+                })
+              }
+              required
+            />
+          </div>
+          <div className="flex justify-end gap-4">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="btn-secondary"
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
+            <button type="submit" className="btn-primary">
               Save Deduction
             </button>
           </div>
