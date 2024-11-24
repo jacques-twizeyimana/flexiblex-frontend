@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, addDoc, getDoc, collection } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
 import { toast } from "react-hot-toast";
 import { Building2, Plus, X } from "lucide-react";
@@ -32,10 +32,21 @@ export default function InviteTeam() {
     }
 
     try {
+      // get current user information
+      const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+      const companyId = userDoc.data()?.companyId;
+
       const validEmails = emails.filter((email) => email.trim() !== "");
-      await updateDoc(doc(db, "companies", auth.currentUser.uid), {
-        invitedMembers: arrayUnion(...validEmails),
-      });
+
+      // insert into invitations collection
+      for (const email of validEmails) {
+        await addDoc(collection(db, "invitations"), {
+          email,
+          companyId,
+          invitedBy: auth.currentUser.uid,
+          createdAt: new Date().toISOString(),
+        });
+      }
 
       toast.success("Team members invited successfully!");
       navigate("/dashboard");

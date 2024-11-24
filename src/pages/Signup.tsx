@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import { toast } from "react-hot-toast";
 import { Building2 } from "lucide-react";
@@ -12,11 +19,25 @@ export default function Signup() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [role, setRole] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    const loadingToast = toast.loading("Creating your account...");
+
     try {
+      // Check for invitation
+      const invitationsRef = collection(db, "invitations");
+      const q = query(invitationsRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+      let companyId = null;
+
+      if (!querySnapshot.empty) {
+        companyId = querySnapshot.docs[0].data().companyId;
+      }
+
       const { user } = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -29,15 +50,25 @@ export default function Signup() {
           lastName,
           email,
           role,
+          companyId,
           createdAt: new Date().toISOString(),
         });
 
+        toast.dismiss(loadingToast);
         toast.success("Account created successfully!");
-        navigate("/company-setup");
+
+        if (companyId) {
+          navigate("/dashboard");
+        } else {
+          navigate("/company-setup");
+        }
       }
     } catch (error: unknown) {
       console.error("Signup error:", error);
+      toast.dismiss(loadingToast);
       toast.error((error as Error).message || "Failed to create account");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -76,6 +107,7 @@ export default function Signup() {
                 placeholder="John"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                disabled={isLoading}
               />
             </div>
             <div>
@@ -91,6 +123,7 @@ export default function Signup() {
                 placeholder="Doe"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -102,6 +135,7 @@ export default function Signup() {
               className="input-field mt-1"
               value={role}
               onChange={(e) => setRole(e.target.value)}
+              disabled={isLoading}
             >
               <option value="">Select a profession</option>
               <option value="doctor">Doctor</option>
@@ -134,6 +168,7 @@ export default function Signup() {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -149,15 +184,17 @@ export default function Signup() {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoading}
             />
           </div>
 
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
             >
-              Create Account
+              {isLoading ? "Creating Account..." : "Create Account"}
             </button>
           </div>
         </form>

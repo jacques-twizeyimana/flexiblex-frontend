@@ -1,23 +1,43 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../lib/firebase";
 import { toast } from "react-hot-toast";
 import { Building2 } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    const loadingToast = toast.loading("Signing in...");
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/company-setup");
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.data();
+
+      toast.dismiss(loadingToast);
+      toast.success("Signed in successfully!");
+
+      console.log("User data:", userData);
+
+      if (!userData?.companyId) {
+        navigate("/company-setup");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
+      toast.dismiss(loadingToast);
       toast.error("Invalid credentials");
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -41,7 +61,7 @@ export default function Login() {
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6 " onSubmit={handleLogin}>
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div>
             <label className="block text-base font-medium text-gray-700">
               Email address
@@ -55,6 +75,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input-field mt-1"
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -70,6 +91,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input-field mt-1"
+              disabled={isLoading}
             />
           </div>
           <div className="flex items-center justify-between">
@@ -99,8 +121,12 @@ export default function Login() {
           </div>
 
           <div>
-            <button type="submit" className="btn-primary block w-full">
-              Sign in
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="btn-primary block w-full disabled:opacity-50"
+            >
+              {isLoading ? "Signing in..." : "Sign in"}
             </button>
           </div>
         </form>
