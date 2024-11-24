@@ -50,6 +50,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
           <input
             type="text"
             name="firstName"
+            placeholder="John"
             value={formData.firstName}
             onChange={handleChange}
             className="input-field mt-1"
@@ -63,6 +64,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
           <input
             type="text"
             name="lastName"
+            placeholder="Doe"
             value={formData.lastName}
             onChange={handleChange}
             className="input-field mt-1"
@@ -79,6 +81,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
           <input
             type="email"
             name="email"
+            placeholder="johndoe@gmail.com"
             value={formData.email}
             onChange={handleChange}
             className="input-field mt-1"
@@ -96,7 +99,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
             onChange={handleChange}
             className="input-field mt-1"
             required
-            pattern="[0-9]{10}"
             placeholder="1234567890"
           />
         </div>
@@ -110,6 +112,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
           <input
             type="text"
             name="position"
+            placeholder="Software Engineer"
             value={formData.position}
             onChange={handleChange}
             className="input-field mt-1"
@@ -120,14 +123,33 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
           <label className="block text-sm font-medium text-gray-700">
             Department
           </label>
-          <input
-            type="text"
+          <select
             name="department"
             value={formData.department}
             onChange={handleChange}
             className="input-field mt-1"
             required
-          />
+          >
+            <option value="Human Resources">Human Resources</option>
+            <option value="Finance">Finance</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Sales">Sales</option>
+            <option value="Information Technology">
+              Information Technology
+            </option>
+            <option value="Operations">Operations</option>
+            <option value="Customer Service">Customer Service</option>
+            <option value="Logistics">Logistics</option>
+            <option value="Legal">Legal</option>
+            <option value="Research And Development">
+              Research and Development
+            </option>
+            <option value="Procurement">Procurement</option>
+            <option value="Quality Assurance">Quality Assurance</option>
+            <option value="Public Relations">Public Relations</option>
+            <option value="Administration">Administration</option>
+            <option value="Product Management">Product Management</option>
+          </select>
         </div>
       </div>
 
@@ -145,21 +167,23 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
             required
           />
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Salary
+            Status
           </label>
-          <input
-            type="number"
-            name="salary"
-            value={formData.salary}
+          <select
+            name="status"
+            value={formData.status}
             onChange={handleChange}
             className="input-field mt-1"
             required
-            min="0"
-            step="1000"
-          />
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
         </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Employment Type
@@ -177,21 +201,20 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
           </select>
         </div>
       </div>
-
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Status
+          Salary (RWF)
         </label>
-        <select
-          name="status"
-          value={formData.status}
+        <input
+          type="number"
+          name="salary"
+          value={formData.salary}
           onChange={handleChange}
           className="input-field mt-1"
           required
-        >
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
+          min="0"
+          step="1000"
+        />
       </div>
 
       <div className="flex justify-end">
