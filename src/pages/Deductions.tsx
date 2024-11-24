@@ -143,7 +143,7 @@ export default function Deductions() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {deduction.type === "fixed"
-                        ? `$${deduction.value}`
+                        ? `${deduction.value.toLocaleString()} RWF`
                         : `${deduction.value}%`}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

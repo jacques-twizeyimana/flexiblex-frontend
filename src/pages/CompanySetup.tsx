@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
 import { toast } from "react-hot-toast";
 import { Building2 } from "lucide-react";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function CompanySetup() {
   const [companyName, setCompanyName] = useState("");
@@ -12,6 +13,7 @@ export default function CompanySetup() {
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,8 +23,15 @@ export default function CompanySetup() {
       return;
     }
 
+    setIsLoading(true);
+    const loadingToast = toast.loading("Setting up your company...");
+
     try {
-      await setDoc(doc(db, "companies", auth.currentUser.uid), {
+      // Generate a new company ID
+      const companyId = uuidv4();
+
+      // Create company document
+      await setDoc(doc(db, "companies", companyId), {
         name: companyName,
         email: companyEmail,
         phone: phoneNumber,
@@ -35,10 +44,21 @@ export default function CompanySetup() {
         ownerId: auth.currentUser.uid,
       });
 
+      // Update user with company ID
+      await updateDoc(doc(db, "users", auth.currentUser.uid), {
+        companyId,
+        role: "admin" // Set as admin since they're creating the company
+      });
+
+      toast.dismiss(loadingToast);
+      toast.success("Company created successfully!");
       navigate("/invite-team");
     } catch (error) {
+      toast.dismiss(loadingToast);
       toast.error("Failed to create company");
-      console.log(error);
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -71,6 +91,7 @@ export default function CompanySetup() {
               placeholder="Paper Inc."
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -86,9 +107,9 @@ export default function CompanySetup() {
               placeholder="contact@paper.co"
               value={companyEmail}
               onChange={(e) => setCompanyEmail(e.target.value)}
+              disabled={isLoading}
             />
           </div>
-          {/* phone number */}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -103,6 +124,7 @@ export default function CompanySetup() {
               placeholder="+1 234 567 890"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
+              disabled={isLoading}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -119,6 +141,7 @@ export default function CompanySetup() {
                 placeholder="Rwanda"
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
+                disabled={isLoading}
               />
             </div>
             <div>
@@ -134,6 +157,7 @@ export default function CompanySetup() {
                 placeholder="Kigali"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -149,14 +173,16 @@ export default function CompanySetup() {
               placeholder="123 Main St"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              disabled={isLoading}
             />
           </div>
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
             >
-              Continue
+              {isLoading ? "Creating Company..." : "Continue"}
             </button>
           </div>
         </form>

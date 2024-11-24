@@ -176,7 +176,7 @@ export default function Benefits() {
             <input
               type="text"
               name="benefitName"
-              placeholder="Health Insurance"
+              placeholder="Home Internet"
               className="input-field"
               value={newBenefit.name}
               onChange={(e) =>
@@ -192,7 +192,7 @@ export default function Benefits() {
             <textarea
               name="benefitDescription"
               rows={3}
-              placeholder="Health insurance for all employees"
+              placeholder="Internet package for all employees"
               className="input-field"
               value={newBenefit.description}
               onChange={(e) =>
