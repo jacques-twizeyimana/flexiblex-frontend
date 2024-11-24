@@ -7,14 +7,19 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  query,
+  where,
+  getDoc,
 } from "firebase/firestore";
-import { db } from "../lib/firebase";
+import { db, auth } from "../lib/firebase";
 import Modal from "../components/Modal";
 import toast from "react-hot-toast";
 import { Employee } from "../types";
 import EmployeeForm from "../components/EmployeeForm";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const EmployeeManagement = () => {
+  const [user] = useAuthState(auth);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,14 +27,41 @@ const EmployeeManagement = () => {
     null
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [userCompanyId, setUserCompanyId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchEmployees();
-  }, []);
+    if (user) {
+      getUserCompanyId();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (userCompanyId) {
+      fetchEmployees();
+    }
+  }, [userCompanyId]);
+
+  const getUserCompanyId = async () => {
+    if (!user) return;
+    try {
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.data();
+      if (userData?.companyId) {
+        setUserCompanyId(userData.companyId);
+      }
+    } catch (error) {
+      console.error("Error fetching user company ID:", error);
+    }
+  };
 
   const fetchEmployees = async () => {
+    if (!userCompanyId) return;
     try {
-      const querySnapshot = await getDocs(collection(db, "employees"));
+      const q = query(
+        collection(db, "employees"),
+        where("companyId", "==", userCompanyId)
+      );
+      const querySnapshot = await getDocs(q);
       const employeeData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -42,44 +74,72 @@ const EmployeeManagement = () => {
   };
 
   const handleAddEmployee = async (data: Omit<Employee, "id">) => {
+    if (!userCompanyId) {
+      toast.error("Company ID not found");
+      return;
+    }
+
     setIsLoading(true);
+    const loadingToast = toast.loading("Adding employee...");
+
     try {
-      await addDoc(collection(db, "employees"), data);
+      await addDoc(collection(db, "employees"), {
+        ...data,
+        companyId: userCompanyId,
+        createdAt: new Date().toISOString(),
+      });
       await fetchEmployees();
       setIsModalOpen(false);
+      toast.dismiss(loadingToast);
       toast.success("Employee added successfully");
     } catch (error) {
+      toast.dismiss(loadingToast);
       toast.error("Failed to add employee");
       console.error("Error adding employee:", error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const handleUpdateEmployee = async (data: Omit<Employee, "id">) => {
     if (!selectedEmployee) return;
+
     setIsLoading(true);
+    const loadingToast = toast.loading("Updating employee...");
+
     try {
       const employeeRef = doc(db, "employees", selectedEmployee.id);
-      await updateDoc(employeeRef, data);
+      await updateDoc(employeeRef, {
+        ...data,
+        updatedAt: new Date().toISOString(),
+      });
       await fetchEmployees();
       setIsModalOpen(false);
       setSelectedEmployee(null);
+      toast.dismiss(loadingToast);
       toast.success("Employee updated successfully");
     } catch (error) {
+      toast.dismiss(loadingToast);
       toast.error("Failed to update employee");
       console.error("Error updating employee:", error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const handleDeleteEmployee = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this employee?"))
       return;
+
+    const loadingToast = toast.loading("Deleting employee...");
+
     try {
       await deleteDoc(doc(db, "employees", id));
       await fetchEmployees();
+      toast.dismiss(loadingToast);
       toast.success("Employee deleted successfully");
     } catch (error) {
+      toast.dismiss(loadingToast);
       toast.error("Failed to delete employee");
       console.error("Error deleting employee:", error);
     }
@@ -90,6 +150,14 @@ const EmployeeManagement = () => {
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );
+
+  if (!userCompanyId) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-gray-600">Loading company information...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
@@ -130,6 +198,10 @@ const EmployeeManagement = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Employee
                 </th>
+                {/* phone */}
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Phone Number
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Position
                 </th>
@@ -168,6 +240,9 @@ const EmployeeManagement = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {employee.phone}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {employee.position}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -175,7 +250,7 @@ const EmployeeManagement = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      className={`px-2 inline-flex text-xs uppercase leading-5 font-semibold rounded-full ${
                         employee.status === "active"
                           ? "bg-green-100 text-green-800"
                           : "bg-red-100 text-red-800"
