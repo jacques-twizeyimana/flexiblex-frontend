@@ -21,6 +21,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
     department: initialData?.department || "",
     startDate: initialData?.startDate || "",
     salary: initialData?.salary || 0,
+    paymentRate: initialData?.paymentRate || "monthly",
     status: initialData?.status || "active",
     employmentType: initialData?.employmentType || "full-time",
   });
@@ -201,20 +202,39 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
           </select>
         </div>
       </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Salary (RWF)
-        </label>
-        <input
-          type="number"
-          name="salary"
-          value={formData.salary}
-          onChange={handleChange}
-          className="input-field mt-1"
-          required
-          min="0"
-          step="1000"
-        />
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Payment Rate
+          </label>
+          <select
+            name="paymentRate"
+            value={formData.paymentRate}
+            onChange={handleChange}
+            className="input-field mt-1"
+            required
+          >
+            <option value="monthly">Monthly</option>
+            <option value="hourly">Hourly</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            {formData.paymentRate === "monthly" ? "Monthly Salary (RWF)" : "Hourly Rate (RWF)"}
+          </label>
+          <input
+            type="number"
+            name="salary"
+            value={formData.salary}
+            onChange={handleChange}
+            className="input-field mt-1"
+            required
+            min="0"
+            step={formData.paymentRate === "monthly" ? "1000" : "100"}
+            placeholder={formData.paymentRate === "monthly" ? "300000" : "2000"}
+          />
+        </div>
       </div>
 
       <div className="flex justify-end">
