@@ -14,6 +14,8 @@ import NotFound from "./pages/Notfound";
 import EmployeeManagement from "./pages/Employees";
 import Leave from "./pages/Leave";
 import Attendance from "./pages/Attendance";
+import Payments from "./pages/Payments";
+import PayrollDetails from "./pages/PayrollDetails";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
             <Route path="employees" element={<EmployeeManagement />} />
             <Route path="leave" element={<Leave />} />
             <Route path="attendance" element={<Attendance />} />
+            <Route path="payments" element={<Payments />} />
+            <Route path="payments/:id" element={<PayrollDetails />} />
             <Route path="benefits" element={<Benefits />} />
             <Route path="deductions" element={<Deductions />} />
             <Route path="company-info" element={<CompanyInfo />} />

@@ -7,6 +7,7 @@ import {
   Heart,
   Calculator,
   CalendarCheck,
+  DollarSign,
 } from "lucide-react";
 
 const menuItems = [
@@ -14,6 +15,7 @@ const menuItems = [
   { icon: Users, label: "Employees", path: "/dashboard/employees" },
   { icon: CalendarCheck, label: "Attendance", path: "/dashboard/attendance" },
   { icon: Clock, label: "Leave", path: "/dashboard/leave" },
+  { icon: DollarSign, label: "Payments", path: "/dashboard/payments" },
   { icon: Building2, label: "Company Info", path: "/dashboard/company-info" },
   { icon: Heart, label: "Benefits", path: "/dashboard/benefits" },
   { icon: Calculator, label: "Deductions", path: "/dashboard/deductions" },
