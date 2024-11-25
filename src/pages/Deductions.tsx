@@ -10,14 +10,7 @@ import { db, auth } from "../lib/firebase";
 import Modal from "../components/Modal";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
-
-interface Deduction {
-  id: string;
-  name: string;
-  type: "fixed" | "percentage";
-  value: number;
-  description: string;
-}
+import { Deduction } from "../types";
 
 type NewDeduction = Omit<Deduction, "id" | "createdAt">;
 

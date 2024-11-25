@@ -46,9 +46,17 @@ export interface TimeRecord {
 export interface Benefit {
   id: string;
   name: string;
-  type: "health" | "retirement" | "insurance";
-  amount: number;
-  deductionType: "percentage" | "fixed";
+  type: "fixed" | "percentage";
+  value: number;
+  description: string;
+}
+
+export interface Deduction {
+  id: string;
+  name: string;
+  type: "fixed" | "percentage";
+  value: number;
+  description: string;
 }
 
 export interface CompanyConfig {
@@ -86,4 +94,27 @@ export interface Attendance {
   present: boolean;
   hoursWorked: number;
   companyId: string;
+}
+
+export interface Payment {
+  employee: Employee;
+  baseSalary: number;
+  benefits: {
+    name: string;
+    amount: number;
+  }[];
+  deductions: {
+    name: string;
+    amount: number;
+  }[];
+  totalBenefits: number;
+  totalDeductions: number;
+  netPay: number;
+}
+
+export interface PayrollData {
+  title: string;
+  startDate: string;
+  endDate: string;
+  employees: Payment[];
 }

@@ -10,14 +10,7 @@ import { db, auth } from "../lib/firebase";
 import Modal from "../components/Modal";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
-
-interface Benefit {
-  id: string;
-  name: string;
-  type: "fixed" | "percentage";
-  value: number;
-  description: string;
-}
+import { Benefit } from "../types";
 
 type NewBenefit = Omit<Benefit, "id" | "createdAt">;
 
