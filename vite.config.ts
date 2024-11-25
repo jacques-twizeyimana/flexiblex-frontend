@@ -4,6 +4,9 @@ import path from "path"
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    'process.env': {}, // Mock the process.env object for the browser
+  },
   plugins: [react()],
   resolve: {
     alias: {
