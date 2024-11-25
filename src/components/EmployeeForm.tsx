@@ -203,8 +203,26 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
+      <div className="grid grid-cols-5 gap-4">
+        <div className="col-span-3">
+          <label className="block text-sm font-medium text-gray-700">
+            {formData.paymentRate === "monthly"
+              ? "Monthly Salary (RWF)"
+              : "Hourly Rate (RWF)"}
+          </label>
+          <input
+            type="number"
+            name="salary"
+            value={formData.salary}
+            onChange={handleChange}
+            className="input-field mt-1"
+            required
+            min="0"
+            step={formData.paymentRate === "monthly" ? "1000" : "100"}
+            placeholder={formData.paymentRate === "monthly" ? "300000" : "2000"}
+          />
+        </div>
+        <div className="col-span-2">
           <label className="block text-sm font-medium text-gray-700">
             Payment Rate
           </label>
@@ -218,22 +236,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
             <option value="monthly">Monthly</option>
             <option value="hourly">Hourly</option>
           </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            {formData.paymentRate === "monthly" ? "Monthly Salary (RWF)" : "Hourly Rate (RWF)"}
-          </label>
-          <input
-            type="number"
-            name="salary"
-            value={formData.salary}
-            onChange={handleChange}
-            className="input-field mt-1"
-            required
-            min="0"
-            step={formData.paymentRate === "monthly" ? "1000" : "100"}
-            placeholder={formData.paymentRate === "monthly" ? "300000" : "2000"}
-          />
         </div>
       </div>
 

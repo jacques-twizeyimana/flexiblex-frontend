@@ -13,6 +13,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/Notfound";
 import EmployeeManagement from "./pages/Employees";
 import Leave from "./pages/Leave";
+import Attendance from "./pages/Attendance";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="" element={<Dashboard />} />
             <Route path="employees" element={<EmployeeManagement />} />
             <Route path="leave" element={<Leave />} />
+            <Route path="attendance" element={<Attendance />} />
             <Route path="benefits" element={<Benefits />} />
             <Route path="deductions" element={<Deductions />} />
             <Route path="company-info" element={<CompanyInfo />} />

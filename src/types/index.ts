@@ -76,3 +76,12 @@ export interface User {
   companyId: string;
   createdAt: string;
 }
+
+export interface Attendance {
+  id: string;
+  employeeId: string;
+  date: string;
+  present: boolean;
+  hoursWorked: number;
+  companyId: string;
+}

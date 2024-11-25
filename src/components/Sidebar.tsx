@@ -6,11 +6,13 @@ import {
   Building2,
   Heart,
   Calculator,
+  CalendarCheck,
 } from "lucide-react";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: Users, label: "Employees", path: "/dashboard/employees" },
+  { icon: CalendarCheck, label: "Attendance", path: "/dashboard/attendance" },
   { icon: Clock, label: "Leave", path: "/dashboard/leave" },
   { icon: Building2, label: "Company Info", path: "/dashboard/company-info" },
   { icon: Heart, label: "Benefits", path: "/dashboard/benefits" },
