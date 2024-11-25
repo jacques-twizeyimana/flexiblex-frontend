@@ -11,6 +11,8 @@ export interface Employee {
   paymentRate: "hourly" | "monthly";
   status: "active" | "inactive";
   employmentType: "full-time" | "part-time" | "seasonal";
+  benefits?: string[];
+  deductions?: string[];
 }
 
 export interface Leave {
