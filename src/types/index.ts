@@ -8,8 +8,23 @@ export interface Employee {
   department: string;
   startDate: string;
   salary: number;
+  paymentRate: "hourly" | "monthly";
   status: "active" | "inactive";
   employmentType: "full-time" | "part-time" | "seasonal";
+}
+
+export interface Leave {
+  id: string;
+  employeeId: string;
+  startDate: string;
+  endDate: string;
+  reason: string;
+  status: "pending" | "approved" | "rejected";
+  isPaid: boolean;
+  remarks?: string;
+  createdAt: string;
+  updatedAt?: string;
+  reviewedBy?: string;
 }
 
 export interface PayrollConfig {
