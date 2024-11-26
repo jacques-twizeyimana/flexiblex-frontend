@@ -14,6 +14,12 @@ export default function PaymentSlip({
   payment,
   payrollPeriod,
 }: PaymentSlipProps) {
+  // Calculate total hours for hourly employees
+  const totalHours =
+    payment.employee.paymentRate === "hourly"
+      ? Math.round(payment.baseSalary / payment.employee.salary)
+      : 0;
+
   return (
     <div className="bg-white p-6 space-y-6">
       <div className="text-center border-b pb-4">
@@ -45,7 +51,7 @@ export default function PaymentSlip({
               <span className="text-gray-500">Payment Rate:</span>{" "}
               {payment.employee.paymentRate === "monthly"
                 ? "Monthly"
-                : "Hourly"}
+                : `Hourly (${payment.employee.salary.toLocaleString()} RWF/hour)`}
             </p>
           </div>
         </div>
@@ -56,7 +62,16 @@ export default function PaymentSlip({
           <h4 className="font-medium text-gray-700 mb-2">Earnings</h4>
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Base Salary</span>
+              <span className="text-gray-500">
+                {payment.employee.paymentRate === "monthly" ? (
+                  "Base Salary"
+                ) : (
+                  <>
+                    Base Salary ({totalHours} hours ×{" "}
+                    {payment.employee.salary.toLocaleString()} RWF)
+                  </>
+                )}
+              </span>
               <span>{payment.baseSalary.toLocaleString()} RWF</span>
             </div>
             {payment.benefits.map((benefit, index) => (
