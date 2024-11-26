@@ -113,6 +113,8 @@ export interface Payment {
 }
 
 export interface PayrollData {
+  id: string;
+  createdAt: string;
   title: string;
   startDate: string;
   endDate: string;
