@@ -96,6 +96,11 @@ export interface Attendance {
   companyId: string;
 }
 
+export interface LeaveDeduction {
+  days: number;
+  amount: number;
+}
+
 export interface Payment {
   employee: Employee;
   baseSalary: number;
@@ -107,16 +112,19 @@ export interface Payment {
     name: string;
     amount: number;
   }[];
+  leaveDeductions: LeaveDeduction[];
   totalBenefits: number;
   totalDeductions: number;
   netPay: number;
 }
 
 export interface PayrollData {
-  id: string;
-  createdAt: string;
+  id?: string;
   title: string;
   startDate: string;
   endDate: string;
   employees: Payment[];
+  companyId: string;
+  createdAt: string;
+  createdBy: string;
 }

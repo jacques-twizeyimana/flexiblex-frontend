@@ -23,6 +23,7 @@ import {
   Leave,
   Attendance,
   PayrollData,
+  LeaveDeduction,
 } from "../types";
 import { useNavigate } from "react-router-dom";
 
@@ -37,6 +38,10 @@ interface EmployeePayment {
   deductions: {
     id: string;
     name: string;
+    amount: number;
+  }[];
+  leaveDeductions: {
+    days: number;
     amount: number;
   }[];
   totalBenefits: number;
@@ -97,32 +102,34 @@ export default function Payments() {
     }
   };
 
-  const calculateWorkingDays = (
+  const calculateLeaveDeductions = (
     startDate: string,
     endDate: string,
-    leaves: Leave[]
+    leaves: Leave[],
+    monthlySalary: number
   ) => {
     const start = parseISO(startDate);
     const end = parseISO(endDate);
     const totalDays = differenceInDays(end, start) + 1;
 
-    const unpaidLeaveDays = leaves
-      .filter(
-        (leave) =>
-          !leave.isPaid &&
-          leave.status === "approved" &&
-          isWithinInterval(parseISO(leave.startDate), { start, end }) &&
-          isWithinInterval(parseISO(leave.endDate), { start, end })
-      )
-      .reduce((total, leave) => {
-        return (
-          total +
-          differenceInDays(parseISO(leave.endDate), parseISO(leave.startDate)) +
-          1
-        );
-      }, 0);
+    const unpaidLeaves = leaves.filter(
+      (leave) =>
+        !leave.isPaid &&
+        leave.status === "approved" &&
+        isWithinInterval(parseISO(leave.startDate), { start, end }) &&
+        isWithinInterval(parseISO(leave.endDate), { start, end })
+    );
 
-    return totalDays - unpaidLeaveDays;
+    return unpaidLeaves.map((leave) => {
+      const leaveDays =
+        differenceInDays(parseISO(leave.endDate), parseISO(leave.startDate)) +
+        1;
+      const deductionAmount = (monthlySalary / totalDays) * leaveDays;
+      return {
+        days: leaveDays,
+        amount: deductionAmount,
+      };
+    });
   };
 
   const calculateTotalHours = (
@@ -204,18 +211,17 @@ export default function Payments() {
 
       // Calculate payments for each employee
       const employeePayments: EmployeePayment[] = employees.map((employee) => {
-        // Calculate base salary based on payment rate and attendance/leave
         let baseSalary = 0;
+        let leaveDeductions: LeaveDeduction[] = [];
+
         if (employee.paymentRate === "monthly") {
-          const workingDays = calculateWorkingDays(
+          baseSalary = employee.salary;
+          leaveDeductions = calculateLeaveDeductions(
             data.startDate,
             data.endDate,
-            leaves.filter((leave) => leave.employeeId === employee.id)
+            leaves.filter((leave) => leave.employeeId === employee.id),
+            baseSalary
           );
-          const totalDays =
-            differenceInDays(parseISO(data.endDate), parseISO(data.startDate)) +
-            1;
-          baseSalary = (employee.salary * workingDays) / totalDays;
         } else {
           // Hourly rate
           const totalHours = calculateTotalHours(
@@ -224,6 +230,7 @@ export default function Payments() {
             attendance.filter((record) => record.employeeId === employee.id)
           );
           baseSalary = employee.salary * totalHours;
+          leaveDeductions = []; // Hourly employees don't have leave deductions
         }
 
         // Calculate benefits
@@ -254,10 +261,10 @@ export default function Payments() {
           (sum, b) => sum + b.amount,
           0
         );
-        const totalDeductions = employeeDeductions.reduce(
-          (sum, d) => sum + d.amount,
-          0
-        );
+        const totalDeductions =
+          employeeDeductions.reduce((sum, d) => sum + d.amount, 0) +
+          leaveDeductions.reduce((sum, d) => sum + d.amount, 0);
+
         const netPay = baseSalary + totalBenefits - totalDeductions;
 
         return {
@@ -265,6 +272,7 @@ export default function Payments() {
           baseSalary,
           benefits: employeeBenefits,
           deductions: employeeDeductions,
+          leaveDeductions,
           totalBenefits,
           totalDeductions,
           netPay,
@@ -314,7 +322,12 @@ export default function Payments() {
 
       {/* Past Payrolls */}
       <div className="bg-white rounded-lg shadow-sm mb-6">
-        <div className="overflow-x-auto mt-14 bg-blue-300">
+        <div className="p-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Payroll History
+          </h2>
+        </div>
+        <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
