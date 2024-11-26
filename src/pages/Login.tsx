@@ -5,6 +5,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import { toast } from "react-hot-toast";
 import { Building2 } from "lucide-react";
+import logo from '../../T07UGR60XC7-U07UQQCRU22-310cc139bcf3-512.jpeg';
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -46,7 +47,7 @@ export default function Login() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="flex justify-center">
-            <Building2 className="h-12 w-12 text-green-600" />
+            <img src={logo} alt="Logo" className="h-12 w-12" />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
             Welcome back
