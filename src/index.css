@@ -83,3 +83,7 @@
     scrollbar-width: none;
   }
 }
+
+.center {
+  @apply flex justify-center items-center;
+}
