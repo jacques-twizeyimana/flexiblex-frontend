@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Flexiblex - Modern Payroll Management System
 
 Flexiblex is a comprehensive payroll management application built with React and Vite, designed to streamline your organization's payroll processes with an intuitive user interface and powerful features.
@@ -97,3 +98,8 @@ flexiblex/
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+=======
+# flexiblex-frontend
+
+[Edit in StackBlitz next generation editor ⚡️](https://stackblitz.com/~/github.com/jacques-twizeyimana/flexiblex-frontend)
+>>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc

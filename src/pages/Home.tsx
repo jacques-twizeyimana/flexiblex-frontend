@@ -1,14 +1,26 @@
+<<<<<<< HEAD
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+=======
+>>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
 import {
   ArrowRight,
   Clock,
   DollarSign,
+<<<<<<< HEAD
   User,
+=======
+  Users2,
+>>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
   Calculator,
   Shield,
   Gift,
 } from "lucide-react";
+<<<<<<< HEAD
+=======
+import { Button } from "../components/ui/button";
+import { Link } from "react-router-dom";
+>>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
 
 export default function Home() {
   return (
@@ -18,10 +30,17 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="text-2xl font-bold text-green-600">FlexibleX</div>
           <div className="flex gap-4">
+<<<<<<< HEAD
             <Link href="/login">
               <Button variant="ghost">Sign In</Button>
             </Link>
             <Link href="/signup">
+=======
+            <Link to="/login">
+              <Button variant="ghost">Sign In</Button>
+            </Link>
+            <Link to="/signup">
+>>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
               <Button className="bg-green-600 hover:bg-green-700">
                 Get Started
               </Button>
@@ -50,7 +69,11 @@ export default function Home() {
                 platform.
               </p>
               <div className="flex justify-center gap-4">
+<<<<<<< HEAD
                 <Link href="signup">
+=======
+                <Link to="/signup">
+>>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
                   <Button
                     size="xxl"
                     className="bg-green-600 hover:bg-green-700"
@@ -71,7 +94,11 @@ export default function Home() {
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <FeatureCard
+<<<<<<< HEAD
                 icon={<User className="w-12 h-12 text-green-600" />}
+=======
+                icon={<Users2 className="w-12 h-12 text-green-600" />}
+>>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
                 title="Employee Management"
                 description="Efficiently manage employee records, from onboarding to role changes and departures."
               />
@@ -112,11 +139,21 @@ export default function Home() {
                 Trusted by Growing Companies
               </h3>
             </div>
+<<<<<<< HEAD
             <div className="flex justify-center items-center gap-12 opacity-50">
               {/* Add company logos here */}
               <div className="text-2xl font-bold">ALU</div>
               <div className="text-2xl font-bold">SBS Ssystems</div>
               <div className="text-2xl font-bold">FlexibleX Inc.</div>
+=======
+            <div className="flex justify-center items-center gap-12">
+              {/* Add company logos here */}
+              <div className="text-2xl text-red-600 font-bold">ALU</div>
+              <div className="text-2xl font-bold">SBS Ssystems</div>
+              <div className="text-2xl text-green-600 font-bold">
+                FlexibleX Inc.
+              </div>
+>>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
             </div>
           </div>
         </div>
@@ -130,7 +167,11 @@ export default function Home() {
             <p className="text-xl mb-8 text-green-50">
               Join thousands of companies already using FlexibleX
             </p>
+<<<<<<< HEAD
             <Link href="/signup">
+=======
+            <Link to="/signup">
+>>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
               <Button
                 size="lg"
                 variant="outline"
