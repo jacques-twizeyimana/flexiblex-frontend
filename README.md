@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Flexiblex - Modern Payroll Management System
 
 Flexiblex is a comprehensive payroll management application built with React and Vite, designed to streamline your organization's payroll processes with an intuitive user interface and powerful features.
