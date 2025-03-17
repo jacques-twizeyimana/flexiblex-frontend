@@ -16,7 +16,9 @@ export default function Home() {
       {/* Navigation */}
       <nav className="border-b bg-white/80 backdrop-blur-md fixed w-full z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-green-600">FlexibleX</div>
+          <div className="text-2xl font-bold text-green-600">
+            Ishema Payroll
+          </div>
           <div className="flex gap-4">
             <Link to="/login">
               <Button variant="ghost">Sign In</Button>
@@ -45,9 +47,9 @@ export default function Home() {
                 Automate your payroll process
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-                Transform your payroll management with FlexibleX. Streamline
-                payments, taxes, and employee benefits all in one powerful
-                platform.
+                Transform your payroll management with Ishema Payroll.
+                Streamline payments, taxes, and employee benefits all in one
+                powerful platform.
               </p>
               <div className="flex justify-center gap-4">
                 <Link to="/signup">
@@ -117,7 +119,7 @@ export default function Home() {
               <div className="text-2xl text-red-600 font-bold">ALU</div>
               <div className="text-2xl font-bold">SBS Ssystems</div>
               <div className="text-2xl text-green-600 font-bold">
-                FlexibleX Inc.
+                Ishema Payroll Inc.
               </div>
             </div>
           </div>
@@ -130,7 +132,7 @@ export default function Home() {
               Ready to Transform Your Payroll?
             </h2>
             <p className="text-xl mb-8 text-green-50">
-              Join thousands of companies already using FlexibleX
+              Join thousands of companies already using Ishema Payroll
             </p>
             <Link to="/signup">
               <Button
@@ -149,7 +151,7 @@ export default function Home() {
       <footer className="bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center text-gray-600 dark:text-gray-400">
-            © 2024 FlexibleX Payroll. All rights reserved.
+            © 2024 Ishema Payroll. All rights reserved.
           </div>
         </div>
       </footer>

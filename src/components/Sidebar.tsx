@@ -27,7 +27,7 @@ export default function Sidebar() {
   return (
     <div className="h-screen w-64 bg-white border-r border-gray-200 fixed left-0 top-0">
       <div className="flex items-center justify-center h-16 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-green-600">FlexibleX</h1>
+        <h1 className="text-xl font-bold text-green-600">Ishema Payroll</h1>
       </div>
       <nav className="mt-6">
         {menuItems.map((item) => {
