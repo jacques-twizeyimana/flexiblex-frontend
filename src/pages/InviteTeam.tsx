@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db, auth } from '../lib/firebase';
-import { toast } from 'react-hot-toast';
-import { Building2, Users, Plus, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-
-export default function InviteTeam() {
-  const [emails, setEmails] = useState<string[]>(['']);
-=======
 import React, { useState } from "react";
 import { doc, addDoc, getDoc, collection } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
@@ -18,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function InviteTeam() {
   const [emails, setEmails] = useState<string[]>([""]);
->>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
   const navigate = useNavigate();
 
   const handleEmailChange = (index: number, value: string) => {
@@ -28,11 +16,7 @@ export default function InviteTeam() {
   };
 
   const addEmailField = () => {
-<<<<<<< HEAD
-    setEmails([...emails, '']);
-=======
     setEmails([...emails, ""]);
->>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
   };
 
   const removeEmailField = (index: number) => {
@@ -43,26 +27,11 @@ export default function InviteTeam() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth.currentUser) {
-<<<<<<< HEAD
-      toast.error('Please sign in first');
-=======
       toast.error("Please sign in first");
->>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
       return;
     }
 
     try {
-<<<<<<< HEAD
-      const validEmails = emails.filter((email) => email.trim() !== '');
-      await updateDoc(doc(db, 'companies', auth.currentUser.uid), {
-        invitedMembers: arrayUnion(...validEmails),
-      });
-
-      toast.success('Team members invited successfully!');
-      navigate('/dashboard');
-    } catch (error) {
-      toast.error('Failed to send invitations');
-=======
       // get current user information
       const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
       const companyId = userDoc.data()?.companyId;
@@ -84,7 +53,6 @@ export default function InviteTeam() {
     } catch (error) {
       toast.error("Failed to send invitations");
       console.error(error);
->>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
     }
   };
 
@@ -103,25 +71,6 @@ export default function InviteTeam() {
           </p>
         </div>
 
-<<<<<<< HEAD
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            {emails.map((email, index) => (
-              <div key={index} className="flex gap-2">
-                <div className="relative flex-1">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Users className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="email"
-                    required
-                    className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                    placeholder="team@example.com"
-                    value={email}
-                    onChange={(e) => handleEmailChange(index, e.target.value)}
-                  />
-                </div>
-=======
         <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-4">
             {emails.map((email, index) => (
@@ -134,7 +83,6 @@ export default function InviteTeam() {
                   value={email}
                   onChange={(e) => handleEmailChange(index, e.target.value)}
                 />
->>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
                 {index > 0 && (
                   <button
                     type="button"

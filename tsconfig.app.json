@@ -18,17 +18,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-<<<<<<< HEAD
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    }
-=======
     "noFallthroughCasesInSwitch": true
->>>>>>> d652b5ac2a17ce71a740cb53d155b10b096870cc
   },
   "include": ["src"]
 }

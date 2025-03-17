@@ -136,13 +136,12 @@ export default function Attendance() {
   ) => {
     if (!userCompanyId) return;
 
-    let hoursWorked = 8; // Default hours for monthly employees
+    let hoursWorked = 8; // Default for monthly employees
 
-    
     if (paymentRate === "hourly" && present) {
-      const hours = prompt("Enter hours worked:");
-      if (hours === null) return; // User attendance cancelled
-      hoursWorked = Number(hours) || 0; // Default to 0 if input is invalid or empty
+      const hours = prompt("Enter hours worked (default: 8):", "8");
+      if (hours === null) return; // User cancelled
+      hoursWorked = Number(hours) || 8;
     }
 
     try {
